@@ -1,0 +1,249 @@
+-- [[ Toggles & Variables ]] --
+getgenv().autoPunch = false;
+getgenv().autoReset = false;
+getgenv().orbFarm = false;
+getgenv().resettime = 16;
+local Player = game.Players.LocalPlayer;
+local amount;
+local selectedStat;
+
+-- // Library Setup \\ --
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Window = Library:CreateWindow({
+	Name = "Decrypted Hub",
+	LoadingTitle = "Decrypted Hub - Premium",
+	LoadingSubtitle = "Made by Decrypted",
+	ConfigurationSaving = {
+		Enabled = false,
+		FolderName = nil,
+		FileName = "Config"
+	},
+        Discord = {
+        	Enabled = true,
+        	Invite = "rxNkTX7tEa",
+        	RememberJoins = true
+        },
+	KeySystem = false,
+	KeySettings = {
+		Title = "Decrypted Hub",
+		Subtitle = "Key System",
+		Note = "Join the discord (discord.gg/rxNkTX7tEa)",
+		FileName = "SiriusKey",
+		SaveKey = false,
+		GrabKeyFromSite = false,
+		Key = "5yed.A"
+	}
+})
+local Main = Window:CreateTab("AutoFarm", 4483362458)
+local AutoStat = Window:CreateTab("AutoStat", 4483362458)
+local Credits = Window:CreateTab("Credits", 4483362458)
+local Misc = Window:CreateTab("Miscellaneous", 4483362458)
+local Autofarm = Main:CreateSection("Autofarm")
+
+Library:Notify({
+   Title = "Decrypted Hub",
+   Content = "Decrypted Hub Premium Loaded Successfully.",
+   Duration = 6.5,
+   Image = 8621787398,
+   Actions = {
+      Ignore = {
+         Name = "OK",
+         Callback = function()
+      end
+   },
+},
+})
+
+-- [[ MAIN SECTION ]] --
+local Safezone = Main:CreateButton({
+   Name = "Teleport to Safezone",
+   Callback = function()
+      game.Players.LocalPlayer.character.HumanoidRootPart.CFrame = CFrame.new(-2503.50146, 97.0075302, -2057.61035) + Vector3.new(0,0,0)
+   end,
+})
+
+local AutoPunch = Main:CreateToggle({
+   Name = "Auto Punch",
+   CurrentValue = false,
+   Flag = "AutoPunch",
+   Callback = function(Value)
+      autoPunch = Value
+      punch()
+   end,
+})
+
+local AutoReset = Main:CreateToggle({
+   Name = "Auto Reset",
+   CurrentValue = false,
+   Flag = "AutoReset",
+   Callback = function(Value)
+      autoReset = Value
+      reset()
+   end,
+})
+
+local FirstOrbFarm = Main:CreateToggle({
+   Name = "Orb Farm - First Mode",
+   CurrentValue = false,
+   Flag = "FirstOrbFarm",
+   Callback = function(Value)
+      orbFarm = Value
+      firstorbfarm()
+   end,
+})
+
+local SecondOrbFarm = Main:CreateToggle({
+   Name = "Orb Farm - Second Mode",
+   CurrentValue = false,
+   Flag = "SecondOrbFarm",
+   Callback = function(Value)
+      orbFarm = Value
+      secondorbfarm()
+   end,
+})
+
+local ResetTime = Main:CreateSlider({
+   Name = "Reset Time",
+   Range = {0, 100},
+   Increment = 1,
+   Suffix = "Seconds",
+   CurrentValue = 16,
+   Flag = "ResetTime",
+   Callback = function(Value)
+      resettime = Value
+   end,
+})
+
+local InfYield = Main:CreateButton({
+   Name = "Infinite Yield",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+   end,
+})
+
+-- [[ AUTOSTAT SECTION ]] --
+local Slider = AutoStat:CreateSlider({
+   Name = "Allocate",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "Skill points",
+   CurrentValue = 100,
+   Flag = "Points",
+   Callback = function(Value)
+      amount = Value
+   end,
+})
+
+local Stats = AutoStat:CreateDropdown({
+   Name = "Stat to Allocate Skill Points",
+   Options = {"Vitality","Strength","Healing","Energy","metalSkin"},
+   CurrentOption = {"Strength"},
+   MultipleOptions = false,
+   Flag = "Stat",
+   Callback = function(Option)
+      selectedStat = Option
+   end,
+})
+
+local Allocate = AutoStat:CreateButton({
+   Name = "Allocate",
+   Callback = function()
+      Library:Notify({
+        Title = "Decrypted Hub",
+        Content = "AutoStat not functional yet.",
+        Duration = 6.5,
+        Image = 8621787398,
+        Actions = {
+          Ignore = {
+            Name = "OK",
+            Callback = function()
+          end
+        },
+      },
+})
+   end,
+})
+
+local AutoStatNote = AutoStat:CreateLabel("NOT FUNCTIONAL YET")
+
+-- [[ CREDITS SECTION ]] --
+local Owner = Credits:CreateLabel("Owner: Decrypted")
+local Helper = Credits:CreateLabel("Helper: Dxveloper_Zack")
+local Shlex = Credits:CreateLabel("Library: Shlexware")
+
+-- [[ MISC SECTION ]] --
+local MiscPunch = Misc:CreateKeybind({
+   Name = "Hold Keybind to Auto Punch",
+   CurrentKeybind = "R",
+   HoldToInteract = true,
+   Flag = "MiscPunch",
+   Callback = function(Keybind)
+    spawn(function()
+      local Target = game.ClientStorage.Events.Punch;
+      Target:FireServer(0.4, 0.1, 1);
+      wait()
+    end)
+   end,
+})
+
+
+-- [[ FUNCTIONS ]] --
+function punch()
+	spawn(function()
+		while autoPunch == true do
+			local Target = game.ClientStorage.Events.Punch;
+			Target:FireServer(0.4, 0.1, 1);
+			wait()
+		end
+	end)
+end
+
+function reset()
+	spawn(function()
+		while autoReset == true do
+			wait(getgenv().resettime)
+			game:GetService("Players").LocalPlayer.Character.Humanoid.Health = 0
+		end
+	end)
+end
+
+function firstorbfarm()
+  spawn(function()
+    while orbFarm == true do
+      local Orb = game.Workspace.ExperienceOrbs:FindFirstChild('experienceOrb')
+      if Orb then
+        Orb.effects.Core.Enabled = false
+        Orb.effects.Wave.Enabled = false
+        Orb.effects.Rays_Thick.Enabled = false
+        Orb.effects.Flare.Enabled = false
+        Orb.effects.PointLight.Brightness = 0
+        Orb.CFrame = Player.Character.HumanoidRootPart.CFrame
+      end
+      wait()
+    end
+	end)
+end
+
+function secondorbfarm()
+	spawn(function()
+		local playerHead = game.Players.LocalPlayer.Character.Head
+		while orbFarm == true do
+			for i, v in pairs(game:GetService("Workspace").ExperienceOrbs:GetDescendants()) do
+				if v.Name == "TouchInterest" and v.Parent then
+					firetouchinterest(playerHead, v.Parent, 0)
+					firetouchinterest(playerHead, v.Parent, 1)
+				end
+			end
+			wait()
+		end
+	end)
+end
+
+function stat()
+  spawn(function()
+    for i = 1, amount do
+      game.ReplicatedStorage.Events.UpgradeAbility:InvokeServer(selectedStat)
+      game.RunService.Heartbeat:Wait()
+    end
+  end)
+end
